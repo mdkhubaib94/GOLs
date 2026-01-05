@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test New Features</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>New Features Test</h1>
+    
+    <div class="test-section">
+        <h2>✅ Features Successfully Implemented</h2>
+        
+        <h3>1. Today's Schedule Button</h3>
+        <ul>
+            <li>✅ Added "📅 Today's Schedule" button to the main page</li>
+            <li>✅ Button opens a side panel showing today's timeblocks</li>
+            <li>✅ Responsive layout that works on mobile and desktop</li>
+            <li>✅ Shows schedule in chronological order with time ranges</li>
+            <li>✅ Displays both goal-based and standalone timeblocks</li>
+        </ul>
+        
+        <h3>2. Special Events Feature</h3>
+        <ul>
+            <li>✅ Added "🎉 Add Special Event" button in calendar section</li>
+            <li>✅ Modal form to create special events with name, date, description, and color</li>
+            <li>✅ Events appear on calendar dates with colored indicators and names</li>
+            <li>✅ "📋 View Events" button to see all special events in a list</li>
+            <li>✅ Ability to edit and delete special events</li>
+            <li>✅ Events stored in localStorage for persistence</li>
+        </ul>
+        
+        <h3>3. Enhanced Calendar Interaction</h3>
+        <ul>
+            <li>✅ Right-click or click on calendar dates shows context menu</li>
+            <li>✅ Context menu provides options to view schedule, add/edit events</li>
+            <li>✅ Visual indicators for special events with different colors</li>
+            <li>✅ Event names displayed on calendar cells</li>
+        </ul>
+        
+        <h3>4. Responsive Design</h3>
+        <ul>
+            <li>✅ Layout adapts to different screen sizes</li>
+            <li>✅ Mobile-friendly context menus and modals</li>
+            <li>✅ Touch-friendly interface elements</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎯 How to Test the Features</h2>
+        
+        <h3>Testing Today's Schedule:</h3>
+        <ol>
+            <li>Go to the main page (index)</li>
+            <li>Click the "📅 Today's Schedule" button</li>
+            <li>The right side should show today's schedule</li>
+            <li>If you have timeblocks for today, they'll appear in chronological order</li>
+            <li>Click "✕ Close" to hide the schedule</li>
+        </ol>
+        
+        <h3>Testing Special Events:</h3>
+        <ol>
+            <li>Scroll down to the calendar section</li>
+            <li>Click "🎉 Add Special Event" button</li>
+            <li>Fill in event details (name, date, optional description, color)</li>
+            <li>Click "Add Event"</li>
+            <li>The event should appear on the calendar with a colored indicator</li>
+            <li>Click "📋 View Events" to see all your events</li>
+            <li>Click on a calendar date to see context menu with event options</li>
+        </ol>
+        
+        <h3>Testing Enhanced Calendar:</h3>
+        <ol>
+            <li>Click on any calendar date</li>
+            <li>A context menu should appear with options</li>
+            <li>Try "View Schedule" to see that date's timeblocks</li>
+            <li>Try "Add Special Event" to create an event for that date</li>
+            <li>If an event exists, you'll see "Edit Special Event" and "Delete Event" options</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 Technical Implementation Details</h2>
+        
+        <h3>Files Modified:</h3>
+        <ul>
+            <li><strong>goals/templates/index.html</strong> - Added new layout structure and modals</li>
+            <li><strong>goals/static/css/styles.css</strong> - Added styles for schedule panel and special events</li>
+            <li><strong>goals/static/js/main.js</strong> - Added JavaScript functionality for new features</li>
+        </ul>
+        
+        <h3>Key Features:</h3>
+        <ul>
+            <li><strong>Responsive Layout:</strong> Flexbox-based layout that adapts to screen size</li>
+            <li><strong>Local Storage:</strong> Special events persist between sessions</li>
+            <li><strong>Context Menus:</strong> Right-click functionality for calendar dates</li>
+            <li><strong>Real-time Updates:</strong> Calendar refreshes when events are added/removed</li>
+            <li><strong>Color Coding:</strong> 7 different colors for special events</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>🚀 Ready to Use!</h2>
+        <p>The features are now fully implemented and ready for testing. Visit <a href="http://127.0.0.1:8000" target="_blank">http://127.0.0.1:8000</a> to try them out!</p>
+        
+        <p><strong>Note:</strong> Make sure you're logged in to see the full functionality. If you don't have an account, you can register at <a href="http://127.0.0.1:8000/register/" target="_blank">http://127.0.0.1:8000/register/</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>GOL - Gamification of Life</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo-container">
+                    <img src="{% static 'images/logo.jpg' %}" alt="GOL Logo" class="logo-image">
+                    <h1 class="app-name">GOL</h1>
+                </div>
+            </div>
+            
+            {% if user.is_authenticated %}
+                <div class="nav-right authenticated">
+                    <div class="user-info">
+                        <div class="date-info">
+                            <span id="currentDate"></span>
+                            <span id="currentDay"></span>
+                        </div>
+                        <div class="user-details">
+                            <span class="username">{{ user.username }}</span>
+                            <div class="user-actions">
+                                <a href="{% url 'index' %}" class="btn btn-primary">Dashboard</a>
+                                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="nav-right">
+                    <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Transform Your Life Into An 
+                        <span class="gradient-text">Epic Game</span>
+                    </h1>
+                    <p class="hero-description">
+                        GOL (Gamification of Life) is your ultimate accountability system that turns daily goals into engaging challenges. 
+                        Track progress, build habits, and level up your life with our innovative goal management platform.
+                    </p>
+                    
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">🎯</div>
+                            <span>Smart Goal Tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <span>Progress Analytics</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⏰</div>
+                            <span>Time Management</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🏆</div>
+                            <span>Achievement System</span>
+                        </div>
+                    </div>
+
+                    {% if not user.is_authenticated %}
+                        <div class="hero-actions">
+                            <a href="{% url 'register' %}" class="btn btn-primary btn-large">Start Your Journey</a>
+                            <a href="{% url 'login' %}" class="btn btn-outline btn-large">Sign In</a>
+                        </div>
+                    {% else %}
+                        <div class="hero-actions">
+                            <a href="{% url 'index' %}" class="btn btn-primary btn-large">Go to Dashboard</a>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="visual-container">
+                        <div class="floating-card card-1">
+                            <div class="card-header">Daily Goals</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <span class="progress-text">75% Complete</span>
+                        </div>
+                        
+                        <div class="floating-card card-2">
+                            <div class="card-header">Streak Counter</div>
+                            <div class="streak-number">12</div>
+                            <span class="streak-text">Days</span>
+                        </div>
+                        
+                        <div class="floating-card card-3">
+                            <div class="card-header">Level Progress</div>
+                            <div class="level-info">
+                                <span class="level">Level 5</span>
+                                <div class="xp-bar">
+                                    <div class="xp-fill" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="section-title">Why Choose GOL?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-large">🎮</div>
+                    <h3>Gamified Experience</h3>
+                    <p>Turn your goals into exciting quests with levels, achievements, and rewards that keep you motivated.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">📈</div>
+                    <h3>Smart Analytics</h3>
+                    <p>Track your progress with detailed analytics and insights that help you understand your productivity patterns.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">🔄</div>
+                    <h3>Flexible Scheduling</h3>
+                    <p>Create custom timeblocks with various frequencies - daily, weekdays, weekends, or custom patterns.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">🎯</div>
+                    <h3>Nested Goals</h3>
+                    <p>Break down complex goals into manageable subgoals with infinite nesting for perfect organization.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">📅</div>
+                    <h3>Calendar Integration</h3>
+                    <p>Visualize your schedule with an integrated calendar that shows your timeblocks and progress.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">💪</div>
+                    <h3>Accountability System</h3>
+                    <p>Stay accountable with progress tracking, streak counters, and motivational rewards and consequences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    {% if not user.is_authenticated %}
+    <section class="cta">
+        <div class="cta-container">
+            <h2 class="cta-title">Ready to Level Up Your Life?</h2>
+            <p class="cta-description">Join thousands of users who have transformed their productivity with GOL</p>
+            <div class="cta-actions">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-large">Create Free Account</a>
+                <a href="{% url 'login' %}" class="btn btn-outline btn-large">Sign In</a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <img src="{% static 'images/logo.jpg' %}" alt="GOL Logo" class="logo-image small">
+                        <span class="footer-app-name">GOL</span>
+                    </div>
+                    <p class="footer-description">Gamification of Life - Transform your goals into achievements</p>
+                </div>
+                
+                <div class="footer-right">
+                    <div class="footer-links">
+                        <a href="#features">Features</a>
+                        <a href="{% url 'register' %}">Get Started</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'index' %}">Dashboard</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 GOL - Gamification of Life. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update current date and day
+        function updateDateTime() {
+            const now = new Date();
+            const dateElement = document.getElementById('currentDate');
+            const dayElement = document.getElementById('currentDay');
+            
+            if (dateElement && dayElement) {
+                dateElement.textContent = now.toLocaleDateString('en-US', {
+                    month: 'long', day: 'numeric', year: 'numeric'
+                });
+                dayElement.textContent = now.toLocaleDateString('en-US', { weekday: 'long' });
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', updateDateTime);
+    </script>
+</body>
+</html>

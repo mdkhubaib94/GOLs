@@ -1,0 +1,241 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Accountability System - Home</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="header-left">
+            <div class="day-number-box">
+                <span class="day-label">Day</span>
+                <span class="day-value" id="dayNumber">0</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="current-date">
+                <div id="todayDate"></div>
+                <div id="todayDay"></div>
+            </div>
+            <div class="user-info">
+                <span id="userName">{{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="main-content-container">
+        <!-- LEFT SIDE: PROGRESS SECTION -->
+        <section class="progress-section">
+            <h2>Your Goals</h2>
+            <div class="progress-bars-container" id="progressBarsContainer" ></div>
+
+            <div class="button-row">
+                <button class="btn btn-primary" id="newGoalBtn">+ New Goal</button>
+                <button class="btn btn-secondary" id="newTimeblockBtn">+ New Timeblock</button>
+                <button class="btn btn-info" id="todayScheduleBtn">📅 Today's Schedule</button>
+            </div>
+        </section>
+
+        <!-- RIGHT SIDE: TODAY'S SCHEDULE (Initially Hidden) -->
+        <section class="today-schedule-section hidden" id="todayScheduleSection">
+            <div class="schedule-header">
+                <h2 id="scheduleTitle">Today's Schedule</h2>
+                <button class="btn btn-small btn-secondary" id="closeScheduleBtn">✕ Close</button>
+            </div>
+            <div class="schedule-content" id="scheduleContent">
+                <!-- Schedule content will be loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- CALENDAR SECTION -->
+    <section class="calendar-section">
+        <div class="calendar-header">
+            <button class="calendar-nav-btn" id="prevMonthBtn">&lt;</button>
+            <h2 id="currentMonth"></h2>
+            <button class="calendar-nav-btn" id="nextMonthBtn">&gt;</button>
+        </div>
+
+        <div class="calendar-weekdays">
+            <div class="weekday">Sun</div>
+            <div class="weekday">Mon</div>
+            <div class="weekday">Tue</div>
+            <div class="weekday">Wed</div>
+            <div class="weekday">Thu</div>
+            <div class="weekday">Fri</div>
+            <div class="weekday">Sat</div>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+        
+        <!-- Special Events Controls -->
+        <div class="special-events-controls">
+            <button class="btn btn-warning btn-small" id="addSpecialEventBtn">🎉 Add Special Event</button>
+            <button class="btn btn-info btn-small" id="viewSpecialEventsBtn">📋 View Events</button>
+        </div>
+    </section>
+
+    <!-- NEW GOAL MODAL -->
+    <div id="newGoalModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Goal</h2>
+                <button class="close-btn" id="closeGoalModal">&times;</button>
+            </div>
+
+            <form id="newGoalForm">
+                <div class="form-group">
+                    <label for="goalTitle">Goal Title *</label>
+                    <input type="text" id="goalTitle" required placeholder="e.g., Gym, DSA, Hifz">
+                </div>
+
+                <div class="form-group">
+                    <label for="goalPurpose">Purpose (Why?) *</label>
+                    <textarea id="goalPurpose" required placeholder="Why do you want to achieve this goal?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="goalCarrot">Carrot (Reward) *</label>
+                    <input type="text" id="goalCarrot" required placeholder="Reward for success">
+                </div>
+
+                <div class="form-group">
+                    <label for="goalStick">Stick (Consequence) *</label>
+                    <input type="text" id="goalStick" required placeholder="Consequence for failure">
+                </div>
+
+                <div class="form-group">
+                    <label for="goalDays">Total Days *</label>
+                    <input type="number" id="goalDays" min="1" required placeholder="e.g., 30">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelGoalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DAY SCHEDULE MODAL -->
+    <div id="dayScheduleModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="dayScheduleTitle"></h2>
+                <button class="close-btn" id="closeDayScheduleModal">&times;</button>
+            </div>
+
+            <div id="dayScheduleContent"></div>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div id="deleteConfirmModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <button class="close-btn" id="closeDeleteModal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <p>Are you sure you want to delete the goal "<span id="deleteGoalTitle"></span>"?</p>
+                <p><strong>This action cannot be undone.</strong></p>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPECIAL EVENT MODAL -->
+    <div id="specialEventModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Special Event</h2>
+                <button class="close-btn" id="closeSpecialEventModal">&times;</button>
+            </div>
+
+            <form id="specialEventForm">
+                <div class="form-group">
+                    <label for="eventDate">Event Date *</label>
+                    <input type="date" id="eventDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventName">Event Name *</label>
+                    <input type="text" id="eventName" required placeholder="e.g., Birthday, Anniversary, Meeting">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDescription">Description (Optional)</label>
+                    <textarea id="eventDescription" placeholder="Additional details about the event" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventColor">Event Color</label>
+                    <select id="eventColor">
+                        <option value="purple">🟣 Purple</option>
+                        <option value="pink">🩷 Pink</option>
+                        <option value="orange">🟠 Orange</option>
+                        <option value="yellow">🟡 Yellow</option>
+                        <option value="green">🟢 Green</option>
+                        <option value="blue">🔵 Blue</option>
+                        <option value="red">🔴 Red</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelSpecialEventBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SPECIAL EVENTS LIST MODAL -->
+    <div id="specialEventsListModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Special Events</h2>
+                <button class="close-btn" id="closeSpecialEventsListModal">&times;</button>
+            </div>
+
+            <div id="specialEventsListContent">
+                <!-- Events list will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.indexUrl = "{% url 'index' %}";
+    </script>
+    <script src="{% static 'js/state.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/api.js' %}"></script>
+    <script src="{% static 'js/ui.js' %}"></script>
+    <script src="{% static 'js/goals.js' %}"></script>
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'js/timeblocks.js' %}"></script>
+    <script src="{% static 'js/subgoals.js' %}"></script>
+    <script src="{% static 'js/special_events.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

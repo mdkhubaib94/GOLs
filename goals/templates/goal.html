@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Goal Details - Accountability System</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="back-btn" id="backBtn" type="button">&larr; Back</button>
+        </div>
+
+        <div class="header-right">
+            <div class="current-date">
+                <div id="todayDate"></div>
+                <div id="todayDay"></div>
+            </div>
+            <div class="user-info">
+                <span id="userName">{{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="goal-page-container">
+        <!-- GOAL INFO -->
+        <section class="goal-info-section">
+            <h1 id="goalTitle">{% if goal %}{{ goal.title }}{% else %}Goal Title{% endif %}</h1>
+
+            <div class="goal-details-grid">
+                <div class="goal-detail-card">
+                    <h3>Purpose</h3>
+                    <p id="goalPurpose">{% if goal %}{{ goal.purpose }}{% else %}Why you're doing this...{% endif %}</p>
+                </div>
+                <div class="goal-detail-card">
+                    <h3>Carrot (Reward)</h3>
+                    <p id="goalCarrot">{% if goal %}{{ goal.carrot }}{% else %}Your reward...{% endif %}</p>
+                </div>
+                <div class="goal-detail-card">
+                    <h3>Stick (Consequence)</h3>
+                    <p id="goalStick">{% if goal %}{{ goal.stick }}{% else %}The consequence...{% endif %}</p>
+                </div>
+            </div>
+
+            <div class="timing-section">
+                <div class="timing-box">
+                    <span class="timing-label">Days Since Start</span>
+                    <span class="timing-value" id="daysSinceStart">0</span>
+                </div>
+                <div class="timing-box">
+                    <span class="timing-label">Total Days Assigned</span>
+                    <span class="timing-value" id="totalDaysAssigned">0</span>
+                </div>
+                <div class="timing-box">
+                    <span class="timing-label">Days Left</span>
+                    <span class="timing-value countdown" id="daysLeft">0</span>
+                </div>
+            </div>
+
+            <div class="goal-progress-bar-container">
+                <div class="progress-bar-large">
+                    <div class="progress-fill" id="goalProgressFill"></div>
+                </div>
+                <span id="goalProgressText">0%</span>
+            </div>
+        </section>
+
+        <!-- SUBGOALS -->
+        <section class="subgoals-section">
+            <div class="subgoals-header">
+                <h2>Subgoals</h2>
+                <div style="display:flex;gap:10px;">
+                    <button class="btn btn-primary" id="addSubgoalBtn">+ Add Subgoal</button>
+                    <button class="btn btn-secondary" id="addGoalTimeblockBtn">+ Add Timeblock</button>
+                </div>
+            </div>
+
+            <div class="subgoals-list" id="subgoalsList">
+                <!-- dynamically generated -->
+            </div>
+        </section>
+
+        <div class="calendar-toggle-section">
+            <label class="toggle-switch">
+                <input type="checkbox" id="toggleCalendarSwitch" checked>
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Show Calendar</span>
+            </label>
+        </div>
+
+        <!-- SHARED CALENDAR -->
+        <section class="calendar-section" id="calendarSection">
+            <div class="calendar-header">
+                <button class="calendar-nav-btn" id="prevMonthBtn">&lt;</button>
+                <h2 id="currentMonth"></h2>
+                <button class="calendar-nav-btn" id="nextMonthBtn">&gt;</button>
+            </div>
+
+            <div class="calendar-weekdays">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </section>
+    </main>
+
+    <!-- MODALS: Day schedule, add subgoal, add timeblock -->
+    <div id="dayScheduleModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="dayScheduleTitle"></h2>
+                <button class="close-btn" id="closeDayScheduleModal">&times;</button>
+            </div>
+            <div id="dayScheduleContent"></div>
+        </div>
+    </div>
+
+    <div id="addSubgoalModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Subgoal</h2>
+                <button class="close-btn" id="closeSubgoalModal">&times;</button>
+            </div>
+            <form id="addSubgoalForm">
+                <div class="form-group">
+                    <label for="subgoalTitle">Subgoal Title *</label>
+                    <input type="text" id="subgoalTitle" required placeholder="e.g., Arrays, Linked Lists">
+                </div>
+                <div class="form-group">
+                    <label for="subgoalDays">Days to Assign *</label>
+                    <input type="number" id="subgoalDays" min="1" required placeholder="e.g., 5">
+                </div>
+                <div class="form-group">
+                    <label for="subgoalBuffer">Buffer Days (optional)</label>
+                    <input type="number" id="subgoalBuffer" min="0" placeholder="e.g., 2">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelSubgoalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Subgoal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="goalTimeblockModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Timeblock</h2>
+                <button class="close-btn" id="closeGoalTimeblockModal">&times;</button>
+            </div>
+            <form id="addGoalTimeblockForm">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="form-group">
+                        <label for="goalTimeblockFromDate">From Date *</label>
+                        <input type="date" id="goalTimeblockFromDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalTimeblockTillDate">Till Date *</label>
+                        <input type="date" id="goalTimeblockTillDate" required>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="form-group">
+                        <label for="goalTimeblockStartTime">Start Time *</label>
+                        <input type="time" id="goalTimeblockStartTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalTimeblockEndTime">End Time *</label>
+                        <input type="time" id="goalTimeblockEndTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="goalTimeblockFrequency">Frequency *</label>
+                    <select id="goalTimeblockFrequency" required>
+                        <option value="daily">Daily</option>
+                        <option value="alternate">Every Other Day</option>
+                        <option value="weekdays">Weekdays Only (Mon-Fri)</option>
+                        <option value="weekends">Weekends Only (Sat-Sun)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="goalTimeblockSubgoal">Select Subgoal *</label>
+                    <select id="goalTimeblockSubgoal" required>
+                        <option value="">Choose a subgoal...</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelGoalTimeblockBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Timeblocks</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // safe injection of server values
+        var rawGoalId = "{% if goal %}{{ goal.id }}{% else %}{% endif %}";
+        window.currentGoalId = rawGoalId ? parseInt(rawGoalId) : null;
+        window.indexUrl = "{% url 'index' %}";
+    </script>
+
+    <script src="{% static 'js/state.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/api.js' %}"></script>
+    <script src="{% static 'js/ui.js' %}"></script>
+    <script src="{% static 'js/goals.js' %}"></script>
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'js/timeblocks.js' %}"></script>
+    <script src="{% static 'js/subgoals.js' %}"></script>
+    <script src="{% static 'js/special_events.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
