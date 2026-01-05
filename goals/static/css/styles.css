@@ -9,26 +9,64 @@
 }
 
 :root {
-    /* Colors - Updated to match landing page */
-    --primary: #1a237e;
-    --primary-dark: #0d1b5e;
-    --secondary: #4caf50;
-    --danger: #ef4444;
-    --warning: #f57c00;
-    --info: #06b6d4;
-    --light: #f8f9fa;
-    --dark: #1a237e;
-    --gray: #6b7280;
-    --border: #e5e7eb;
+    /* =========================================
+       DESIGN SYSTEM - SLATE & TEAL THEME
+       ========================================= */
 
-    /* Goal type colors for calendar dots */
-    --color-gym: #22c55e;
+    /* Primary Paradigm: Professional & Calm */
+    --primary: #0f172a;
+    /* Slate 900 - Headings, Primary Actions */
+    --primary-light: #334155;
+    /* Slate 700 */
+    --accent: #0d9488;
+    /* Teal 600 - Highlights, Success actions */
+    --accent-hover: #0f766e;
+    /* Teal 700 */
+
+    /* Semantic Colors */
+    --secondary: #0d9488;
+    /* Teal as secondary for continuity */
+    --success: #10b981;
+    /* Emerald 500 */
+    --danger: #ef4444;
+    /* Red 500 */
+    --warning: #f59e0b;
+    /* Amber 500 */
+    --info: #3b82f6;
+    /* Blue 500 */
+
+    /* Neutral/Surface Colors */
+    --bg-app: #f1f5f9;
+    /* Slate 100 - Main Background */
+    --surface: #ffffff;
+    /* White - Cards/Modals */
+    --surface-hover: #f8fafc;
+    /* Slate 50 */
+    --border: #e2e8f0;
+    /* Slate 200 */
+    --text-main: #1e293b;
+    /* Slate 800 */
+    --text-muted: #64748b;
+    /* Slate 500 */
+
+    /* Shadows (Elevation) */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+    /* Goal type colors */
+    --color-gym: #10b981;
     --color-exam: #ef4444;
     --color-course: #3b82f6;
-    --color-coding: #f59e0b;
-    --color-hifz: #8b5cf6;
+    --color-coding: #8b5cf6;
+    --color-hifz: #f59e0b;
 
-    /* Spacing */
+    /* Spacing & Layout */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -36,14 +74,16 @@
     --spacing-xl: 32px;
 
     /* Typography */
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
     font-family: var(--font-primary);
-    background-color: #ffffff;
-    color: var(--dark);
+    background-color: var(--bg-app);
+    color: var(--text-main);
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ================================================
@@ -185,18 +225,18 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
     padding: var(--spacing-md);
-    background-color: rgba(76, 175, 80, 0.05);
-    border-radius: 8px;
-    border: 2px solid transparent;
-    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.05);
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
 }
 
 .progress-bar-item:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--info);
 }
 
 .progress-bar-content {
@@ -394,23 +434,24 @@ body {
 
 .calendar-date {
     aspect-ratio: 1;
-    border: 2px solid var(--border);
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     padding: var(--spacing-sm);
-    background-color: white;
+    background-color: var(--surface);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     min-height: 100px;
-    min-width: 44px; /* Minimum touch target */
 }
 
 .calendar-date:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    border-color: var(--info);
+    transform: translateY(-2px);
+    z-index: 10;
 }
 
 .calendar-date.has-timeblocks:hover {
@@ -498,79 +539,84 @@ body {
    ================================================ */
 
 .btn {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 10px 20px;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
     text-decoration: none;
-    display: inline-block;
-    min-height: 44px; /* Minimum touch target size */
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    gap: 8px;
+    letter-spacing: 0.3px;
+    min-height: 40px;
+}
+
+.btn:active {
+    transform: scale(0.98);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--secondary), #2e7d32);
+    background-color: var(--primary);
     color: white;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    background-color: var(--primary-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, var(--warning), #e65100);
-    color: white;
-    box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+    background-color: white;
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+    background-color: var(--surface-hover);
+    border-color: var(--text-muted);
+    transform: translateY(-1px);
 }
 
 .btn-info {
-    background: linear-gradient(135deg, var(--info), #0891b2);
+    background-color: var(--info);
     color: white;
-    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-info:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+    background-color: #2563eb;
+    /* Blue 600 */
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-warning {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background-color: var(--warning);
     color: white;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-warning:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    background-color: #d97706;
+    /* Amber 600 */
 }
 
 .btn-danger {
-    background-color: var(--danger);
-    color: white;
+    background-color: white;
+    color: var(--danger);
+    border: 1px solid var(--danger);
 }
 
 .btn-danger:hover {
-    background-color: #dc2626;
-}
-
-.btn-small {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: 12px;
-    font-weight: 500;
+    background-color: #fef2f2;
+    /* Red 50 */
+    box-shadow: var(--shadow-sm);
 }
 
 /* ================================================
@@ -583,7 +629,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(15, 23, 42, 0.6);
+    /* Slate 900 with opacity */
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -595,15 +643,29 @@ body {
 }
 
 .modal-content {
-    background-color: white;
-    border-radius: 12px;
+    background-color: var(--surface);
+    border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     max-width: 500px;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 25px rgba(26, 35, 126, 0.15);
-    border: 1px solid rgba(76, 175, 80, 0.1);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .modal-content.modal-large {
@@ -657,24 +719,23 @@ body {
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 2px solid var(--border);
-    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     font-family: inherit;
     font-size: 14px;
-    transition: border-color 0.3s;
+    transition: all 0.2s;
+    background-color: var(--surface);
+    color: var(--text-main);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--primary);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 80px;
+    border-color: var(--info);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    /* Focus ring */
 }
 
 .form-actions {
@@ -1023,6 +1084,7 @@ body {
 
 /* Large tablets and small desktops */
 @media (max-width: 1024px) {
+
     .progress-section,
     .calendar-section,
     .goal-page-container {
@@ -1156,7 +1218,7 @@ body {
         align-items: stretch;
     }
 
-    .subgoals-header > div {
+    .subgoals-header>div {
         display: flex;
         gap: var(--spacing-sm);
         justify-content: center;
@@ -1542,6 +1604,7 @@ body {
         width: 100%;
     }
 }
+
 .nested-count {
     font-size: 12px;
     color: var(--gray);
@@ -1566,12 +1629,12 @@ body {
    ================================================ */
 
 .goal-container {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 3px solid var(--primary);
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+    box-shadow: var(--shadow-lg);
 }
 
 .goal-header {
@@ -1903,6 +1966,7 @@ body {
 .btn-success:hover {
     background-color: #059669;
 }
+
 /* ================================================
    ENHANCED CALENDAR STYLES
    ================================================ */
@@ -1951,13 +2015,33 @@ body {
     border: 1px solid white;
 }
 
-.special-event-indicator.purple { background-color: #8b5cf6; }
-.special-event-indicator.pink { background-color: #ec4899; }
-.special-event-indicator.orange { background-color: #f97316; }
-.special-event-indicator.yellow { background-color: #eab308; }
-.special-event-indicator.green { background-color: #22c55e; }
-.special-event-indicator.blue { background-color: #3b82f6; }
-.special-event-indicator.red { background-color: #ef4444; }
+.special-event-indicator.purple {
+    background-color: #8b5cf6;
+}
+
+.special-event-indicator.pink {
+    background-color: #ec4899;
+}
+
+.special-event-indicator.orange {
+    background-color: #f97316;
+}
+
+.special-event-indicator.yellow {
+    background-color: #eab308;
+}
+
+.special-event-indicator.green {
+    background-color: #22c55e;
+}
+
+.special-event-indicator.blue {
+    background-color: #3b82f6;
+}
+
+.special-event-indicator.red {
+    background-color: #ef4444;
+}
 
 .special-event-name {
     position: absolute;
@@ -2115,6 +2199,7 @@ body {
     justify-content: flex-end;
     margin-top: var(--spacing-lg);
 }
+
 /* ================================================
    UNAVAILABLE REASON MODAL
    ================================================ */
@@ -2168,6 +2253,7 @@ body {
 .calendar-date.past-day .unavailable-indicator {
     color: #ef4444;
 }
+
 /* ================================================
    AUTHENTICATION PAGES
    ================================================ */
@@ -2312,6 +2398,7 @@ body {
     color: var(--secondary);
     border: 1px solid #bbf7d0;
 }
+
 /* ================================================
    ADVANCED TIMEBLOCK MODAL
    ================================================ */
@@ -2368,7 +2455,7 @@ body {
     background-color: var(--light);
 }
 
-.custom-days-selector input[type="checkbox"]:checked + span {
+.custom-days-selector input[type="checkbox"]:checked+span {
     font-weight: 600;
     color: var(--primary);
 }
@@ -2403,6 +2490,7 @@ body {
     color: white;
     border-color: var(--danger);
 }
+
 /* ================================================
    SUCCESS MODAL
    ================================================ */
@@ -2450,14 +2538,17 @@ body {
         transform: scale(0);
         opacity: 0;
     }
+
     50% {
         transform: scale(1.1);
     }
+
     100% {
         transform: scale(1);
         opacity: 1;
     }
 }
+
 /* ================================================
    TOGGLE SWITCH
    ================================================ */
@@ -2501,11 +2592,11 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-switch input:checked + .toggle-slider {
+.toggle-switch input:checked+.toggle-slider {
     background-color: var(--primary);
 }
 
-.toggle-switch input:checked + .toggle-slider::before {
+.toggle-switch input:checked+.toggle-slider::before {
     transform: translateX(26px);
 }
 
@@ -2513,6 +2604,7 @@ body {
     font-weight: 600;
     color: var(--dark);
 }
+
 /* ================================================
    DELETE CONFIRMATION MODAL
    ================================================ */
@@ -2589,20 +2681,24 @@ body {
         transform: scale(1);
         box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
     }
+
     100% {
         transform: scale(1.05);
         box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
     }
 }
+
 /* ================================================
    ERROR AND VALIDATION MODALS
    ================================================ */
 
-.error-modal, .validation-modal {
+.error-modal,
+.validation-modal {
     z-index: 10002;
 }
 
-.error-content, .validation-content {
+.error-content,
+.validation-content {
     text-align: center;
     padding: var(--spacing-xl);
     max-width: 400px;
@@ -2649,7 +2745,8 @@ body {
     font-size: 22px;
 }
 
-.error-content p, .validation-content p {
+.error-content p,
+.validation-content p {
     color: var(--dark);
     margin-bottom: var(--spacing-lg);
     font-size: 16px;
@@ -2657,9 +2754,19 @@ body {
 }
 
 @keyframes errorShake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 @keyframes validationBounce {
@@ -2667,9 +2774,11 @@ body {
         transform: scale(0);
         opacity: 0;
     }
+
     50% {
         transform: scale(1.1);
     }
+
     100% {
         transform: scale(1);
         opacity: 1;
@@ -2716,6 +2825,7 @@ body {
 
 /* Prevent zoom on input focus on iOS */
 @media screen and (max-width: 768px) {
+
     input[type="text"],
     input[type="password"],
     input[type="email"],
@@ -2801,6 +2911,7 @@ body {
 
 /* Improve subgoal nesting on mobile */
 @media (max-width: 480px) {
+
     .subgoal-box[data-depth="1"],
     .subgoal-box[data-depth="2"],
     .subgoal-box[data-depth="3"],
@@ -2844,6 +2955,7 @@ body {
         from {
             transform: translateY(100%);
         }
+
         to {
             transform: translateY(0);
         }
@@ -2869,6 +2981,7 @@ body {
         padding: var(--spacing-sm);
     }
 }
+
 /* ================================================
    SPECIAL EVENTS STYLES
    ================================================ */
@@ -2917,13 +3030,34 @@ body {
 }
 
 /* Special event color variations */
-.special-event-indicator.purple { background-color: #8b5cf6; }
-.special-event-indicator.pink { background-color: #ec4899; }
-.special-event-indicator.orange { background-color: #f97316; }
-.special-event-indicator.yellow { background-color: #eab308; color: #000; }
-.special-event-indicator.green { background-color: #22c55e; }
-.special-event-indicator.blue { background-color: #3b82f6; }
-.special-event-indicator.red { background-color: #ef4444; }
+.special-event-indicator.purple {
+    background-color: #8b5cf6;
+}
+
+.special-event-indicator.pink {
+    background-color: #ec4899;
+}
+
+.special-event-indicator.orange {
+    background-color: #f97316;
+}
+
+.special-event-indicator.yellow {
+    background-color: #eab308;
+    color: #000;
+}
+
+.special-event-indicator.green {
+    background-color: #22c55e;
+}
+
+.special-event-indicator.blue {
+    background-color: #3b82f6;
+}
+
+.special-event-indicator.red {
+    background-color: #ef4444;
+}
 
 /* Mobile responsiveness for special events */
 @media (max-width: 480px) {
@@ -2937,20 +3071,21 @@ body {
         max-width: 100%;
         animation: slideUpMenu 0.3s ease-out;
     }
-    
+
     @keyframes slideUpMenu {
         from {
             transform: translateY(100%);
         }
+
         to {
             transform: translateY(0);
         }
     }
-    
+
     .special-event-name {
         font-size: 6px;
     }
-    
+
     .special-event-indicator {
         width: 10px;
         height: 10px;
